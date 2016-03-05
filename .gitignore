@@ -1,9 +1,9 @@
 # Ignore everything in this directory
 *
-/app/*
 # Except these files
 !.gitignore
 !/docker/nginx/*
 !docker-compose.yml
 !.README.md
 !*/
+/app
