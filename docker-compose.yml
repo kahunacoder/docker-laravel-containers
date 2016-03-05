@@ -45,7 +45,6 @@ composer:
     volumes_from:
         - app
     working_dir: /app
-    #command: "install"
 
 redis:
     image: redis
@@ -56,7 +55,6 @@ node:
         - app
     working_dir: /app
     entrypoint: ['node']
-   # command: "install"
 
 ## Developer Tools
 artisan:  
@@ -68,25 +66,20 @@ artisan:
 
 npm:
     image: node:latest
-    #build: ./docker/npm/
     volumes_from:
         - app
     working_dir: /app
     entrypoint: ['npm']
-    #command: "install"
 
 gulp:
     image: kahunacoder/docker-laravel-gulp
-    #build: ./docker/gulp/
     volumes_from:
         - app
     ports:
-        - 3000:3000
-        - 3001:3001
+        - "3000:3000"
+        - "3001:3001"
     working_dir: /app
     entrypoint: ['gulp']
-
-    #command: "-v"
 
 # node:
 #     build: ./docker/node/
