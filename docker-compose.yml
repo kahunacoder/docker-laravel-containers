@@ -1,0 +1,101 @@
+
+nginx:
+    image: nginx:latest
+    ports:
+        - 80:80
+    links:
+        - php
+    volumes_from:
+        - app
+    volumes:
+        - ./docker/nginx/:/etc/nginx/conf.d/
+
+php:
+    image: kahunacoder/docker-laravel-php
+    expose:
+        - 9000
+    links:
+        - mysql
+    volumes_from:
+        - app
+app:
+    image: kahunacoder/docker-laravel-php
+    volumes:
+        - ./app/:/app
+    command: "true"
+
+mysql:
+    image: mysql:latest
+    volumes_from:
+        - data
+    environment:
+        MYSQL_ROOT_PASSWORD: secret
+        MYSQL_DATABASE: project
+        MYSQL_USER: project
+        MYSQL_PASSWORD: project
+
+data:
+    image: mysql:latest
+    volumes:
+        - /var/lib/mysql
+    command: "true"
+
+composer:  
+    image: composer/composer:master
+    volumes_from:
+        - app
+    working_dir: /app
+    #command: "install"
+
+redis:
+    image: redis
+
+node:
+    image: node:latest
+    volumes_from:
+        - app
+    working_dir: /app
+    entrypoint: ['node']
+   # command: "install"
+
+## Developer Tools
+artisan:  
+      image: kahunacoder/docker-laravel-artisian
+      volumes_from:
+        - app
+      links:
+        - mysql
+
+npm:
+    image: node:latest
+    #build: ./docker/npm/
+    volumes_from:
+        - app
+    working_dir: /app
+    entrypoint: ['npm']
+    #command: "install"
+
+gulp:
+    image: kahunacoder/docker-laravel-gulp
+    #build: ./docker/gulp/
+    volumes_from:
+        - app
+    ports:
+        - 3000:3000
+        - 3001:3001
+    working_dir: /app
+    entrypoint: ['gulp']
+
+    #command: "-v"
+
+# node:
+#     build: ./docker/node/
+#     # volumes_from:
+#     #     - app
+#     volumes:
+#         - ./app:/app/tmp
+#     # ports:
+#     #     - "9730:9730"
+#     # links:
+#     #     - redis
+
