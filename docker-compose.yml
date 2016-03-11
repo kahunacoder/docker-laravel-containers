@@ -18,24 +18,25 @@ php:
         - mysql
     volumes_from:
         - app
+
 app:
     image: kahunacoder/docker-laravel-php
+    #build: ./docker/php
     volumes:
         - ./app/:/app
+    working_dir: /app
     command: "true"
 
 mysql:
-    image: mysql:latest
+    image: mysql:5.6
     volumes_from:
         - data
-    environment:
-        MYSQL_ROOT_PASSWORD: secret
-        MYSQL_DATABASE: project
-        MYSQL_USER: project
-        MYSQL_PASSWORD: project
+    ports:
+        - 3306:3306
+    env_file: ./app/.env
 
 data:
-    image: mysql:latest
+    image: mysql:5.6
     volumes:
         - /var/lib/mysql
     command: "true"
@@ -49,12 +50,22 @@ composer:
 redis:
     image: redis
 
-node:
-    image: node:latest
-    volumes_from:
-        - app
-    working_dir: /app
-    entrypoint: ['node']
+# node:
+#     image: node:onbuild
+#     volumes_from:
+#         - app
+#     working_dir: /app
+#     entrypoint: ['node']
+#     # ports:
+#     #     - "8125:8125"
+#     links:
+#         - redis
+#         - php
+
+# permissions:
+#     build: ./docker/permissions
+#     volumes_from:
+#         - app
 
 ## Developer Tools
 artisan:  
@@ -65,11 +76,16 @@ artisan:
         - mysql
 
 npm:
-    image: node:latest
+    image: node:onbuild
     volumes_from:
         - app
+    ports: 
+        - 8125:8125
+    links:
+        - redis
+        - php
     working_dir: /app
-    entrypoint: ['npm']
+    entrypoint: ['npm', 'start']
 
 gulp:
     image: kahunacoder/docker-laravel-gulp
