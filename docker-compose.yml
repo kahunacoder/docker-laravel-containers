@@ -20,10 +20,10 @@ php:
         - app
 
 app:
-    image: kahunacoder/docker-laravel-php
-    #build: ./docker/php
+    image: kahunacoder/docker-laravel-app
     volumes:
         - ./app/:/app
+        - /storage
     working_dir: /app
     command: "true"
 
@@ -50,31 +50,6 @@ composer:
 redis:
     image: redis
 
-# node:
-#     image: node:onbuild
-#     volumes_from:
-#         - app
-#     working_dir: /app
-#     entrypoint: ['node']
-#     # ports:
-#     #     - "8125:8125"
-#     links:
-#         - redis
-#         - php
-
-# permissions:
-#     build: ./docker/permissions
-#     volumes_from:
-#         - app
-
-## Developer Tools
-artisan:  
-      image: kahunacoder/docker-laravel-artisian
-      volumes_from:
-        - app
-      links:
-        - mysql
-
 npm:
     image: node:onbuild
     volumes_from:
@@ -87,6 +62,14 @@ npm:
     working_dir: /app
     entrypoint: ['npm', 'start']
 
+## Developer Tools
+artisan:  
+      image: kahunacoder/docker-laravel-artisian
+      volumes_from:
+        - app
+      links:
+        - mysql
+
 gulp:
     image: kahunacoder/docker-laravel-gulp
     volumes_from:
@@ -96,15 +79,3 @@ gulp:
         - "3001:3001"
     working_dir: /app
     entrypoint: ['gulp']
-
-# node:
-#     build: ./docker/node/
-#     # volumes_from:
-#     #     - app
-#     volumes:
-#         - ./app:/app/tmp
-#     # ports:
-#     #     - "9730:9730"
-#     # links:
-#     #     - redis
-
