@@ -50,7 +50,7 @@ composer:
 redis:
     image: redis
 
-npm:
+node:
     image: node:onbuild
     volumes_from:
         - app
@@ -63,6 +63,15 @@ npm:
     entrypoint: ['npm', 'start']
 
 ## Developer Tools
+npm:
+    image: node:onbuild
+    volumes_from:
+        - app
+    links:
+        - php
+    working_dir: /app
+    entrypoint: ['npm']
+
 artisan:  
       image: kahunacoder/docker-laravel-artisian
       volumes_from:
