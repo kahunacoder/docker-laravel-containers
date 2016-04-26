@@ -62,6 +62,14 @@ node:
     working_dir: /app
     entrypoint: ['npm', 'start']
 
+# tor:
+#   image: goldy/tor-hidden-service
+#   links:
+#     - nginx
+#   environment:
+#       PORT_MAP: 80 # Map port to detected service
+
+
 ## Developer Tools
 npm:
     image: node:onbuild
